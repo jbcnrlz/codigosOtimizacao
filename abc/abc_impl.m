@@ -12,35 +12,9 @@ for i = 1:n_bees
     f(i) = fitness(x(1,i));
 end
 for i = 1:iteracoes
-    for j = 1:n_bees
-        v(j) = generateNewV(x,n_bees,j);
-        valorAtual = fitness(v(j));
-        if f(j) < valorAtual
-            x(j) = v(j);
-            f(j) = valorAtual;
-            nao_melhorou(j) = 0;
-        else
-            nao_melhorou(j) = nao_melhorou(j) + 1;
-        end
-    end
-    for j = 1:n_bees
-        rouletteChoosed = runRoulette(f);
-        v(j) = generateNewV(x,n_bees,rouletteChoosed);
-        valorAtual = fitness(v(j));
-        if f(j) < valorAtual
-            x(j) = v(j);
-            f(j) = valorAtual;
-            nao_melhorou(j) = 0;
-        else
-            nao_melhorou(j) = nao_melhorou(j) + 1;
-        end
-    end
-    for j = 1:n_bees
-        if nao_melhorou(j) > limite
-            x(j) = unifrnd(-2,2);
-            f(j) = fitness(x(j));
-        end
-    end
+    [x,v,f,nao_melhorou] = beeType('worker',x,v,f,nao_melhorou,limite);
+    [x,v,f,nao_melhorou] = beeType('helper',x,v,f,nao_melhorou,limite);
+    [x,v,f,nao_melhorou] = beeType('scout',x,v,f,nao_melhorou,limite);
     [mval,midx] = max(f);
     bestForIt(i,1) = x(midx);
     bestForIt(i,2) = mval;
